@@ -1,0 +1,37 @@
+{
+  "name": "osgridref-converter",
+  "version": "0.2.3",
+  "description": "Converts to and from OS Grid Refs and WGS84 (latitude and longitude) coordinate systems",
+  "main": "index.js",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "format": "bun run prettier && bun run lint",
+    "format:fix": "bun run prettier:fix && bun run lint:fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "test": "vitest"
+  },
+  "author": "Kineco Pty Ltd",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.39.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
