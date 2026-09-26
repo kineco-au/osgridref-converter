@@ -1,1 +1,1 @@
-export * from "./gridref-converter";
+export * from "./gridref-converter.js";

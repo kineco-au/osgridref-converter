@@ -41,8 +41,14 @@ describe("parse", () => {
 });
 
 describe("compare", () => {
+  const mustParse = (tag: string) => {
+    const version = parse(tag);
+    if (!version) throw new Error(`not a valid version tag: ${tag}`);
+    return version;
+  };
+
   const order = (a: string, b: string) =>
-    Math.sign(compare(parse(a)!, parse(b)!));
+    Math.sign(compare(mustParse(a), mustParse(b)));
 
   it.each([
     ["v1.0.0", "v2.0.0"],

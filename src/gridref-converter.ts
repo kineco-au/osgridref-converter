@@ -19,7 +19,7 @@ function build100kTable() {
       const n100k =
         ((4 - Math.floor(i1 / 5)) * 5 + (4 - Math.floor(i2 / 5))) * 100000 -
         500000;
-      table[L1! + L2!] = { e0: e100k, n0: n100k };
+      table[L1 + L2] = { e0: e100k, n0: n100k };
     }
   }
   return table;
@@ -66,7 +66,7 @@ export function parseGridRef(gridRef: string) {
   if (s.length < 2) throw new Error("Grid ref too short");
   const letters = s.slice(0, 2);
   const two = TABLE_100K[letters];
-  if (!two) throw new Error("Invalid grid letters: " + letters);
+  if (!two) throw new Error(`Invalid grid letters: ${letters}`);
 
   const rem = s.slice(2);
   if (rem.length === 0) {
@@ -77,7 +77,7 @@ export function parseGridRef(gridRef: string) {
   const half = rem.length / 2;
   const eDigits = rem.slice(0, half);
   const nDigits = rem.slice(half);
-  const scale = Math.pow(10, 5 - half);
+  const scale = 10 ** (5 - half);
   const e_within = eDigits ? parseInt(eDigits, 10) * scale : 0;
   const n_within = nDigits ? parseInt(nDigits, 10) * scale : 0;
   return { easting: two.e0 + e_within, northing: two.n0 + n_within };
@@ -132,8 +132,7 @@ export function osEastNorthToLatLonOSGB36(easting: number, northing: number) {
   }
 
   const nu = (a * F0) / Math.sqrt(1 - e2 * Math.sin(phiPrime) ** 2);
-  const rho =
-    (a * F0 * (1 - e2)) / Math.pow(1 - e2 * Math.sin(phiPrime) ** 2, 1.5);
+  const rho = (a * F0 * (1 - e2)) / (1 - e2 * Math.sin(phiPrime) ** 2) ** 1.5;
   const eta2 = nu / rho - 1;
 
   const tanPhi = Math.tan(phiPrime);
@@ -143,17 +142,14 @@ export function osEastNorthToLatLonOSGB36(easting: number, northing: number) {
   // Coefficients from OS's inverse series (Annex C)
   const VII = tanPhi / (2 * rho * nu);
   const VIII =
-    (tanPhi / (24 * rho * Math.pow(nu, 3))) *
-    (5 + 3 * tan2 + eta2 - 9 * eta2 * tan2);
+    (tanPhi / (24 * rho * nu ** 3)) * (5 + 3 * tan2 + eta2 - 9 * eta2 * tan2);
   const IX =
-    (tanPhi / (720 * rho * Math.pow(nu, 5))) *
-    (61 + 90 * tan2 + 45 * tan2 * tan2);
+    (tanPhi / (720 * rho * nu ** 5)) * (61 + 90 * tan2 + 45 * tan2 * tan2);
   const X = secPhi / nu;
-  const XI = (secPhi / (6 * Math.pow(nu, 3))) * (nu / rho + 2 * tan2);
-  const XII =
-    (secPhi / (120 * Math.pow(nu, 5))) * (5 + 28 * tan2 + 24 * tan2 * tan2);
+  const XI = (secPhi / (6 * nu ** 3)) * (nu / rho + 2 * tan2);
+  const XII = (secPhi / (120 * nu ** 5)) * (5 + 28 * tan2 + 24 * tan2 * tan2);
   const XIIA =
-    (secPhi / (5040 * Math.pow(nu, 7))) *
+    (secPhi / (5040 * nu ** 7)) *
     (61 + 662 * tan2 + 1320 * tan2 * tan2 + 720 * tan2 * tan2 * tan2);
 
   const dE = easting - E0;
@@ -259,8 +255,7 @@ export function latLonToOsEastNorth(latRad: number, lonRad: number) {
   }
 
   const nu = (a * F0) / Math.sqrt(1 - e2 * Math.sin(latRad) ** 2);
-  const rho =
-    (a * F0 * (1 - e2)) / Math.pow(1 - e2 * Math.sin(latRad) ** 2, 1.5);
+  const rho = (a * F0 * (1 - e2)) / (1 - e2 * Math.sin(latRad) ** 2) ** 1.5;
   const eta2 = nu / rho - 1;
 
   const M = meridionalArc(latRad);
@@ -272,26 +267,25 @@ export function latLonToOsEastNorth(latRad: number, lonRad: number) {
   const I = M + N0;
   const II = (nu / 2) * sinLat * cosLat;
   const III =
-    (nu / 24) * sinLat * Math.pow(cosLat, 3) * (5 - tanLat * tanLat + 9 * eta2);
+    (nu / 24) * sinLat * cosLat ** 3 * (5 - tanLat * tanLat + 9 * eta2);
   const IIIA =
     (nu / 720) *
     sinLat *
-    Math.pow(cosLat, 5) *
-    (61 - 58 * tanLat * tanLat + Math.pow(tanLat, 4));
+    cosLat ** 5 *
+    (61 - 58 * tanLat * tanLat + tanLat ** 4);
   const IV = nu * cosLat;
-  const V = (nu / 6) * Math.pow(cosLat, 3) * (nu / rho - tanLat * tanLat);
+  const V = (nu / 6) * cosLat ** 3 * (nu / rho - tanLat * tanLat);
   const VI =
     (nu / 120) *
-    Math.pow(cosLat, 5) *
+    cosLat ** 5 *
     (5 -
       18 * tanLat * tanLat +
-      Math.pow(tanLat, 4) +
+      tanLat ** 4 +
       14 * eta2 -
       58 * eta2 * tanLat * tanLat);
 
-  const N =
-    I + II * dLon * dLon + III * Math.pow(dLon, 4) + IIIA * Math.pow(dLon, 6);
-  const E = E0 + IV * dLon + V * Math.pow(dLon, 3) + VI * Math.pow(dLon, 5);
+  const N = I + II * dLon * dLon + III * dLon ** 4 + IIIA * dLon ** 6;
+  const E = E0 + IV * dLon + V * dLon ** 3 + VI * dLon ** 5;
 
   return { easting: E, northing: N };
 }
@@ -349,7 +343,7 @@ function eastingNorthingToGridRef(e: number, n: number, digits = 10) {
   if (!found) return null; // outside grid
 
   const half = digits / 2;
-  const factor = Math.pow(10, 5 - half);
+  const factor = 10 ** (5 - half);
   // round to nearest within-square metre *before* scaling to digits
   const ewithinMetres = Math.round(e - found.e0);
   const nwithinMetres = Math.round(n - found.n0);

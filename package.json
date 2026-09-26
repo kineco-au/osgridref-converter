@@ -2,40 +2,54 @@
   "name": "osgridref-converter",
   "version": "0.3.0",
   "description": "Converts to and from OS Grid Refs and WGS84 (latitude and longitude) coordinate systems",
-  "main": "dist/index.js",
-  "files": [
-    "dist"
+  "keywords": [
+    "ordnance-survey",
+    "osgb36",
+    "wgs84",
+    "grid-reference",
+    "easting-northing",
+    "latitude-longitude",
+    "coordinates",
+    "geospatial",
+    "gis",
+    "uk"
   ],
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
-    "format": "bun run prettier && bun run lint",
-    "format:fix": "bun run prettier:fix && bun run lint:fix",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "release": "bun run scripts/release.ts",
-    "test": "vitest"
+  "homepage": "https://github.com/kineco-au/osgridref-converter#readme",
+  "bugs": "https://github.com/kineco-au/osgridref-converter/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kineco-au/osgridref-converter.git"
   },
   "author": "Kineco Pty Ltd",
   "license": "MIT",
   "private": false,
-  "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@types/bun": "latest",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
-    "@typescript-eslint/parser": "^8.39.0",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^16.3.0",
-    "jiti": "^2.5.1",
-    "prettier": "^3.6.2",
-    "typescript-eslint": "^8.39.0",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun run build:js && bun run build:types",
+    "build:js": "bun build ./src/index.ts --outdir ./dist --target node",
+    "build:types": "tsc --project tsconfig.build.json",
+    "format": "biome check",
+    "format:fix": "biome check --write",
+    "release": "bun run scripts/release.ts",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@types/bun": "latest",
+    "typescript": "^7.0.2",
+    "vitest": "^3.2.4"
   }
 }

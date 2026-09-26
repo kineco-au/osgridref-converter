@@ -8,11 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "outDir": "./dist"
   },
   "exclude": ["dist", "node_modules"]
 }

@@ -1,45 +1,17 @@
-# Ordnance Survey Grid References Converter
+# osgridref-converter
 
 Convert between Ordnance Survey (OSGB36) grid references and WGS84 latitude/longitude.
 
-The conversion is implemented from first principles against the Ordnance Survey's published
-constants — no runtime dependencies:
+No runtime dependencies. Ships ES modules and TypeScript types.
 
-1. Grid reference string → Easting/Northing (100 km square lookup on the OS letter grid)
-2. Easting/Northing → OSGB36 lat/lon (inverse Transverse Mercator on the Airy 1830 ellipsoid)
-3. OSGB36 → WGS84 (Helmert 7-parameter datum transform, via geodetic ↔ Cartesian)
-
-…and the same chain in reverse for WGS84 → grid reference.
-
-### Accuracy
-
-The Helmert transform is an approximation of the OSGB36/WGS84 relationship, accurate to
-roughly **±2–5 m** across Great Britain. If you need sub-metre accuracy, use Ordnance Survey's
-OSTN15 transformation grid instead.
-
-## Setup
-
-Requires [Bun](https://bun.sh).
+## Installation
 
 ```sh
-bun install
+npm install osgridref-converter
 ```
 
-### Scripts
-
-| Command              | Description                          |
-| -------------------- | ------------------------------------ |
-| `bun run test`       | Run the unit tests (Vitest)          |
-| `bun run build`      | Bundle `src/index.ts` into `dist/`   |
-| `bun run format`     | Check formatting (Prettier) and lint |
-| `bun run format:fix` | Apply Prettier and ESLint fixes      |
-
-CI runs `format` and `test` on every push to `main`; publishing to npm happens on GitHub release.
-
-### Using it as a dependency
-
 ```sh
-bun add os-grid-refs-to-wgs-84   # or: npm install os-grid-refs-to-wgs-84
+bun add osgridref-converter   # or: pnpm add / yarn add
 ```
 
 ## Usage
@@ -49,7 +21,7 @@ bun add os-grid-refs-to-wgs-84   # or: npm install os-grid-refs-to-wgs-84
 `gridRefToWgs84` accepts any standard grid reference form — spaced or unspaced, 2 to 10 digits.
 
 ```ts
-import { gridRefToWgs84 } from "os-grid-refs-to-wgs-84";
+import { gridRefToWgs84 } from "osgridref-converter";
 
 gridRefToWgs84("TL 44982 57869");
 // { lat: 52.19999173938885, lon: 0.11998992997319333 }
@@ -64,7 +36,7 @@ and letters alone resolve to the centre of the 100 km square.
 ### WGS84 → grid reference
 
 ```ts
-import { wgs84ToGridRef } from "os-grid-refs-to-wgs-84";
+import { wgs84ToGridRef } from "osgridref-converter";
 
 wgs84ToGridRef(52.199991739388686, 0.119989929973185);
 // "TL 44982 57869"
@@ -83,7 +55,7 @@ wgs84ToGridRef(-33.9, 151.2); // null
 ### Validating input
 
 ```ts
-import { isValidOsGridRef } from "os-grid-refs-to-wgs-84";
+import { isValidOsGridRef } from "osgridref-converter";
 
 isValidOsGridRef("TL 44982 57869"); // true
 isValidOsGridRef("TQ383810250"); // false — odd number of digits
@@ -98,7 +70,7 @@ Great Britain.
 If your data is already in OS Easting/Northing metres, skip the string parsing:
 
 ```ts
-import { parseGridRef, osGridToWgs84 } from "os-grid-refs-to-wgs-84";
+import { parseGridRef, osGridToWgs84 } from "osgridref-converter";
 
 parseGridRef("TL 44982 57869");
 // { easting: 544982, northing: 257869 }
@@ -112,7 +84,7 @@ osGridToWgs84(544982, 257869);
 A Haversine helper is included, handy for checking how far apart two conversions land:
 
 ```ts
-import { haversineMeters } from "os-grid-refs-to-wgs-84";
+import { haversineMeters } from "osgridref-converter";
 
 haversineMeters(52.2, 0.12, 52.201, 0.12); // 111.19492664429958 (metres)
 ```
@@ -134,6 +106,23 @@ if you need to assemble a different pipeline.
 
 `parseGridRef` throws on malformed input — call `isValidOsGridRef` first when handling
 untrusted data.
+
+## How it works
+
+The conversion is implemented from first principles against the Ordnance Survey's published
+constants:
+
+1. Grid reference string → Easting/Northing (100 km square lookup on the OS letter grid)
+2. Easting/Northing → OSGB36 lat/lon (inverse Transverse Mercator on the Airy 1830 ellipsoid)
+3. OSGB36 → WGS84 (Helmert 7-parameter datum transform, via geodetic ↔ Cartesian)
+
+…and the same chain in reverse for WGS84 → grid reference.
+
+### Accuracy
+
+The Helmert transform is an approximation of the OSGB36/WGS84 relationship, accurate to
+roughly **±2–5 m** across Great Britain. If you need sub-metre accuracy, use Ordnance Survey's
+OSTN15 transformation grid instead.
 
 ## Licence
 
