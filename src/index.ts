@@ -1,1 +1,1 @@
-export * from "./GridRefs";
+export * from "./gridref-converter";

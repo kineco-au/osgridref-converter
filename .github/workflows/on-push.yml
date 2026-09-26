@@ -31,6 +31,13 @@ jobs:
           bun run format
         shell: bash
 
+      - name: Build with Bun
+        run: |
+          export BUN_INSTALL="$HOME/.bun"
+          export PATH="$BUN_INSTALL/bin:$PATH"
+          bun run build
+        shell: bash
+
       - name: Run unit tests with Bun
         run: |
           export BUN_INSTALL="$HOME/.bun"

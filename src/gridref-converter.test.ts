@@ -6,7 +6,7 @@ import {
   isValidOsGridRef,
   parseGridRef,
   wgs84ToGridRef,
-} from "./GridRefs";
+} from "./gridref-converter";
 
 describe("gridRefToWgs84", () => {
   const assertCalculatedValueCloseToExpectedValue = (

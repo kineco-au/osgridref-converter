@@ -1,20 +1,15 @@
 name: Publish Package to npmjs
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Install Bun
         run: |
@@ -23,10 +18,26 @@ jobs:
           export PATH="$BUN_INSTALL/bin:$PATH"
         shell: bash
 
+      # bun ignores NPM_CONFIG_USERCONFIG and does not expand ${VARS} in .npmrc,
+      # so the org NPM_TOKEN has to be written literally into a .npmrc it will read.
+      - name: Configure npm authentication
+        run: |
+          printf 'registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > .npmrc
+        shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - run: |
           export BUN_INSTALL="$HOME/.bun"
           export PATH="$BUN_INSTALL/bin:$PATH"
           bun install --frozen-lockfile
+        shell: bash
+
+      - name: Run unit tests with Bun
+        run: |
+          export BUN_INSTALL="$HOME/.bun"
+          export PATH="$BUN_INSTALL/bin:$PATH"
+          bun run test
         shell: bash
 
       - run: |
@@ -35,10 +46,15 @@ jobs:
           bun run build
         shell: bash
 
-      - run: |
+      - name: Publish to npm
+        run: |
           export BUN_INSTALL="$HOME/.bun"
           export PATH="$BUN_INSTALL/bin:$PATH"
-          bun publish dist --access public
+          bun publish --access public
+        shell: bash
+
+      - name: Create GitHub release
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes
         shell: bash
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
