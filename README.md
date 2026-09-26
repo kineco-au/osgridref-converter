@@ -1,5 +1,10 @@
 # osgridref-converter
 
+[![npm version](https://img.shields.io/npm/v/osgridref-converter.svg)](https://www.npmjs.com/package/osgridref-converter)
+[![npm downloads](https://img.shields.io/npm/dm/osgridref-converter.svg)](https://www.npmjs.com/package/osgridref-converter)
+[![license](https://img.shields.io/npm/l/osgridref-converter.svg)](LICENSE)
+[![types](https://img.shields.io/npm/types/osgridref-converter.svg)](https://www.npmjs.com/package/osgridref-converter)
+
 Convert between Ordnance Survey (OSGB36) grid references and WGS84 latitude/longitude.
 
 No runtime dependencies. Ships ES modules and TypeScript types.
@@ -12,6 +17,31 @@ npm install osgridref-converter
 
 ```sh
 bun add osgridref-converter   # or: pnpm add / yarn add
+```
+
+## Package
+
+| | |
+| --- | --- |
+| Name | [`osgridref-converter`](https://www.npmjs.com/package/osgridref-converter) |
+| Format | ESM only (`"type": "module"`) |
+| Types | Bundled (`dist/index.d.ts`) |
+| Dependencies | None |
+| Unpacked size | ~18 kB |
+| Licence | MIT |
+| Repository | [kineco-au/osgridref-converter](https://github.com/kineco-au/osgridref-converter) |
+
+The package ships a single entry point and is side-effect free, so bundlers can tree-shake
+anything you do not import:
+
+```ts
+import { gridRefToWgs84, wgs84ToGridRef } from "osgridref-converter";
+```
+
+There is no CommonJS build. From a CJS file, use a dynamic import:
+
+```js
+const { gridRefToWgs84 } = await import("osgridref-converter");
 ```
 
 ## Usage
@@ -123,6 +153,10 @@ constants:
 The Helmert transform is an approximation of the OSGB36/WGS84 relationship, accurate to
 roughly **±2–5 m** across Great Britain. If you need sub-metre accuracy, use Ordnance Survey's
 OSTN15 transformation grid instead.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, scripts and the release process.
 
 ## Licence
 
