@@ -1,9 +1,9 @@
-# @kineco/osgridref-converter
+# @kineco-au/osgridref-converter
 
-[![npm version](https://img.shields.io/npm/v/@kineco/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco/osgridref-converter)
-[![npm downloads](https://img.shields.io/npm/dm/@kineco/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco/osgridref-converter)
-[![license](https://img.shields.io/npm/l/@kineco/osgridref-converter.svg)](LICENSE)
-[![types](https://img.shields.io/npm/types/@kineco/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco/osgridref-converter)
+[![npm version](https://img.shields.io/npm/v/@kineco-au/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco-au/osgridref-converter)
+[![npm downloads](https://img.shields.io/npm/dm/@kineco-au/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco-au/osgridref-converter)
+[![license](https://img.shields.io/npm/l/@kineco-au/osgridref-converter.svg)](LICENSE)
+[![types](https://img.shields.io/npm/types/@kineco-au/osgridref-converter.svg)](https://www.npmjs.com/package/@kineco-au/osgridref-converter)
 
 Convert between Ordnance Survey (OSGB36) grid references and WGS84 latitude/longitude.
 
@@ -12,18 +12,18 @@ No runtime dependencies. Ships ES modules and TypeScript types.
 ## Installation
 
 ```sh
-npm install @kineco/osgridref-converter
+npm install @kineco-au/osgridref-converter
 ```
 
 ```sh
-bun add @kineco/osgridref-converter   # or: pnpm add / yarn add
+bun add @kineco-au/osgridref-converter   # or: pnpm add / yarn add
 ```
 
 ## Package
 
 | | |
 | --- | --- |
-| Name | [`@kineco/osgridref-converter`](https://www.npmjs.com/package/@kineco/osgridref-converter) |
+| Name | [`@kineco-au/osgridref-converter`](https://www.npmjs.com/package/@kineco-au/osgridref-converter) |
 | Format | ESM only (`"type": "module"`) |
 | Types | Bundled (`dist/index.d.ts`) |
 | Dependencies | None |
@@ -35,13 +35,13 @@ The package ships a single entry point and is side-effect free, so bundlers can 
 anything you do not import:
 
 ```ts
-import { gridRefToWgs84, wgs84ToGridRef } from "@kineco/osgridref-converter";
+import { gridRefToWgs84, wgs84ToGridRef } from "@kineco-au/osgridref-converter";
 ```
 
 There is no CommonJS build. From a CJS file, use a dynamic import:
 
 ```js
-const { gridRefToWgs84 } = await import("@kineco/osgridref-converter");
+const { gridRefToWgs84 } = await import("@kineco-au/osgridref-converter");
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ const { gridRefToWgs84 } = await import("@kineco/osgridref-converter");
 `gridRefToWgs84` accepts any standard grid reference form — spaced or unspaced, 2 to 10 digits.
 
 ```ts
-import { gridRefToWgs84 } from "@kineco/osgridref-converter";
+import { gridRefToWgs84 } from "@kineco-au/osgridref-converter";
 
 gridRefToWgs84("TL 44982 57869");
 // { lat: 52.19999173938885, lon: 0.11998992997319333 }
@@ -66,7 +66,7 @@ and letters alone resolve to the centre of the 100 km square.
 ### WGS84 → grid reference
 
 ```ts
-import { wgs84ToGridRef } from "@kineco/osgridref-converter";
+import { wgs84ToGridRef } from "@kineco-au/osgridref-converter";
 
 wgs84ToGridRef(52.199991739388686, 0.119989929973185);
 // "TL 44982 57869"
@@ -85,7 +85,7 @@ wgs84ToGridRef(-33.9, 151.2); // null
 ### Validating input
 
 ```ts
-import { isValidOsGridRef } from "@kineco/osgridref-converter";
+import { isValidOsGridRef } from "@kineco-au/osgridref-converter";
 
 isValidOsGridRef("TL 44982 57869"); // true
 isValidOsGridRef("TQ383810250"); // false — odd number of digits
@@ -100,7 +100,7 @@ Great Britain.
 If your data is already in OS Easting/Northing metres, skip the string parsing:
 
 ```ts
-import { parseGridRef, osGridToWgs84 } from "@kineco/osgridref-converter";
+import { parseGridRef, osGridToWgs84 } from "@kineco-au/osgridref-converter";
 
 parseGridRef("TL 44982 57869");
 // { easting: 544982, northing: 257869 }
@@ -114,7 +114,7 @@ osGridToWgs84(544982, 257869);
 A Haversine helper is included, handy for checking how far apart two conversions land:
 
 ```ts
-import { haversineMeters } from "@kineco/osgridref-converter";
+import { haversineMeters } from "@kineco-au/osgridref-converter";
 
 haversineMeters(52.2, 0.12, 52.201, 0.12); // 111.19492664429958 (metres)
 ```
