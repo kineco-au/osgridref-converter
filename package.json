@@ -1,6 +1,6 @@
 {
   "name": "@kineco-au/osgridref-converter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Converts to and from OS Grid Refs and WGS84 (latitude and longitude) coordinate systems",
   "keywords": [
     "ordnance-survey",
