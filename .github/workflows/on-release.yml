@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Bun
         run: |
@@ -22,10 +22,8 @@ jobs:
       # so the org NPM_TOKEN has to be written literally into a .npmrc it will read.
       - name: Configure npm authentication
         run: |
-          printf 'registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > .npmrc
+          printf 'registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=%s\n' '${{ secrets.NPM_TOKEN }}' > .npmrc
         shell: bash
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - run: |
           export BUN_INSTALL="$HOME/.bun"
