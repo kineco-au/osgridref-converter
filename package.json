@@ -12,7 +12,9 @@
     "coordinates",
     "geospatial",
     "gis",
-    "uk"
+    "uk",
+    "converter",
+    "conversion"
   ],
   "homepage": "https://github.com/kineco-au/osgridref-converter#readme",
   "bugs": "https://github.com/kineco-au/osgridref-converter/issues",
